@@ -1,3 +1,4 @@
+import { MathMLToLaTeX } from "mathml-to-latex";
 console.log("hello world from the eq -> speech extension!");
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -35,9 +36,10 @@ async function main() {
       'script[type="math/mml"]'
     )?.innerHTML;
     if (mathMl) {
-      equationDiv.addEventListener("click", () =>
-        console.log("mathMl", mathMl)
-      );
+      equationDiv.addEventListener("click", () => {
+        const tex = MathMLToLaTeX.convert(mathMl);
+        console.log("tex", tex);
+      });
     }
   }
 }

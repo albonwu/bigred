@@ -45,5 +45,8 @@
         "src": "./src/content.js"
       }
     ]
+  },
+  "dependencies": {
+    "mathml-to-latex": "^1.4.1"
   }
 }
