@@ -1,0 +1,10 @@
+from flask import Flask, request
+
+app = Flask(__name__)
+
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    data = request.get_json()
+    print(f"{data = }")
+    return "yippee!"
