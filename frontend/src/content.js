@@ -1,4 +1,5 @@
 import { MathMLToLaTeX } from "mathml-to-latex";
+
 console.log("hello world from the eq -> speech extension!");
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
