@@ -9,6 +9,7 @@
   },
   "content_scripts": [
     {
+      "run_at": "document_idle",
       "js": ["scripts/content.js"],
       "matches": ["https://openstax.org/books/*/pages/*"]
     }
