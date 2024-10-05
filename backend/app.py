@@ -9,4 +9,6 @@ CORS(app)
 def index():
     data = request.get_json()
     print(f"{data = }")
+    text = "E equals M C squared"
+
     return "yippee!"
