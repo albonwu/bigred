@@ -40,18 +40,32 @@ async function main() {
       continue;
     }
     const parentElement = equationDiv.parentElement;
-    const audio = document.createElement("audio");
-    audio.preload = "none";
-    parentElement.insertBefore(audio, equationDiv);
+    const div = document.createElement("div");
+    div.style.width = "100%";
+    div.style.display = "flex";
+    div.style["flex-direction"] = "column";
+    div.style["align-items"] = "center";
+    parentElement.insertBefore(div, equationDiv);
+    let loadingElement = document.createElement("i");
+    loadingElement.innerText = "Loading...";
     // equationDiv.prepend(audio);
     equationDiv.addEventListener("click", async () => {
+      if (window.loadingTexToSpeech) {
+        return;
+      }
+      window.loadingTexToSpeech = true;
+      div.appendChild(loadingElement);
       const tex = MathMLToLaTeX.convert(mathMl);
       const response = await fetch(`${BACKEND}?tex=${tex}`);
       const signedUrl = await response.text();
       console.log("signedUrl", signedUrl);
+      const audio = document.createElement("audio");
       audio.src = signedUrl;
       audio.controls = true;
       audio.autoplay = true;
+      loadingElement = div.removeChild(loadingElement);
+      div.appendChild(audio);
+      window.loadingTexToSpeech = false;
     });
   }
 }
