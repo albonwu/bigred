@@ -34,26 +34,16 @@ def index():
     print(f"{data = }")
     transcript = data or "E equals M C squared"
 
-    response = requests.post(
-        "https://api.cartesia.ai/tts/bytes",
-        headers={
-            "Cartesia-Version": "2024-10-05",
-            "X-API-Key": os.environ.get("CARTESIA_API_KEY"),
-            "Content-Type": "application/json",
-        },
-        json={
-            "transcript": transcript,
-            "model_id": model_id,
-            "voice": {
-                "mode": "id",
-                "id": "1001d611-b1a8-46bd-a5ca-551b23505334",
-            },
-            "output_format": output_format,
-        },
-    )
-
     with open("temp.pcm", "wb") as f:
-        f.write(response.content)
-    subprocess.run("ffmpeg -f -y f32le -i temp.pcm temp.wav", shell=True)
+        for audio_chunk in client.tts.sse(
+            model_id=model_id,
+            transcript=transcript,
+            voice_embedding=voice["embedding"],
+            output_format=output_format,
+            stream=True,
+        ):
+            f.write(audio_chunk["audio"])
+
+    subprocess.run("ffmpeg -y -f f32le -i temp.pcm temp.wav", shell=True)
 
     return "fuck"
