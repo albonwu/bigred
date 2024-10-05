@@ -32,13 +32,17 @@ async function main() {
   console.log("equationDivs", equationDivs);
 
   for (const equationDiv of equationDivs) {
-    console.log("equationDiv", equationDiv);
     const mathMl = equationDiv.querySelector(
       'script[type="math/mml"]'
     )?.innerHTML;
     if (!mathMl) {
       continue;
     }
+    const parentElement = equationDiv.parentElement;
+    const audio = document.createElement("audio");
+    audio.preload = "none";
+    parentElement.insertBefore(audio, equationDiv);
+    // equationDiv.prepend(audio);
     equationDiv.addEventListener("click", () => {
       const tex = MathMLToLaTeX.convert(mathMl);
       fetch(BACKEND, {
@@ -47,10 +51,14 @@ async function main() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ tex }),
-      }).then((data) => console.log("data", data));
+      }).then((data) => {
+        console.log("data", data);
+        audio.controls = true;
+        audio.src =
+          "https://ia802306.us.archive.org/20/items/NeverGonnaGiveYouUp/jocofullinterview41.mp3";
+      });
     });
   }
 }
-// bro wtf: https://mathjax.github.io/MathJax-demos-web/speech-generator/convert-with-speech.html
 
 main();
