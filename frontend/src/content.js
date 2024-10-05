@@ -51,6 +51,7 @@ async function main() {
       console.log("signedUrl", signedUrl);
       audio.src = signedUrl;
       audio.controls = true;
+      audio.autoplay = true;
     });
   }
 }
