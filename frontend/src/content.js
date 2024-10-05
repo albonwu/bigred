@@ -9,6 +9,7 @@ function msFrom(date) {
 }
 const timeoutMs = 20 * 1000;
 const sleepMs = 1000;
+const BACKEND = "http://127.0.0.1:5000";
 
 async function main() {
   let equationDivs = document.querySelectorAll("div[data-type=equation]");
@@ -35,12 +36,19 @@ async function main() {
     const mathMl = equationDiv.querySelector(
       'script[type="math/mml"]'
     )?.innerHTML;
-    if (mathMl) {
-      equationDiv.addEventListener("click", () => {
-        const tex = MathMLToLaTeX.convert(mathMl);
-        console.log("tex", tex);
-      });
+    if (!mathMl) {
+      continue;
     }
+    equationDiv.addEventListener("click", () => {
+      const tex = MathMLToLaTeX.convert(mathMl);
+      fetch(BACKEND, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tex }),
+      }).then((data) => console.log("data", data));
+    });
   }
 }
 // bro wtf: https://mathjax.github.io/MathJax-demos-web/speech-generator/convert-with-speech.html
