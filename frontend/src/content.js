@@ -44,37 +44,13 @@ async function main() {
     audio.preload = "none";
     parentElement.insertBefore(audio, equationDiv);
     // equationDiv.prepend(audio);
-    equationDiv.addEventListener("click", () => {
+    equationDiv.addEventListener("click", async () => {
       const tex = MathMLToLaTeX.convert(mathMl);
-      const eventSource = new EventSource(`${BACKEND}?tex=${tex}`);
-      eventSource.addEventListener("message", (event) => {
-        console.log("event.data", event.data);
-        const audioData = atob(JSON.parse(event.data).audio);
-        console.log("audioData", audioData);
-
-        // const audioCtx = new AudioContext();
-        // const audioBuffer = audioCtx.createBuffer(
-        //   1,
-        //   audioData.length,
-        //   audioCtx.sampleRate
-        // );
-        // const channelData = audioBuffer.getChannelData(0);
-
-        // for (let i = 0; i < audioData.length; i++) {
-        //   channelData[i] = audioData[i];
-        // }
-        // const source = audioCtx.createBufferSource();
-        // source.buffer = audioBuffer;
-        // const streamNode = audioCtx.createMediaStreamDestination();
-        // source.connect(streamNode);
-        // audio.srcObject = streamNode.stream;
-      });
-      // ).then((data) => {
-      //   console.log("data", data);
-      //   audio.controls = true;
-      //   audio.src =
-      //     "https://ia802306.us.archive.org/20/items/NeverGonnaGiveYouUp/jocofullinterview41.mp3";
-      // });
+      const response = await fetch(`${BACKEND}?tex=${tex}`);
+      const signedUrl = await response.text();
+      console.log("signedUrl", signedUrl);
+      audio.src = signedUrl;
+      audio.controls = true;
     });
   }
 }
