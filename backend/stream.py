@@ -20,10 +20,8 @@ code = st.text_area(
 
 
 def handle_submit():
-    requests.post(
-        # "https://webhook.site/2022a60b-2d8a-4a0a-b009-c01682a0b0e3",
-        "http://127.0.0.1:5000/",
-        json={"code": code},
+    requests.get(
+        f"http://127.0.0.1:5000/?tex={code}",
     )
 
 
