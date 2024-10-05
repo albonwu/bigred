@@ -47,3 +47,15 @@ def index():
     subprocess.run("ffmpeg -y -f f32le -i temp.pcm temp.wav", shell=True)
 
     return "fuck"
+
+
+@app.route("/test")
+def test():
+    response = requests.post(
+        "https://uploads.pinata.cloud/v3/files",
+        headers={
+            "authorization": f"Bearer {os.environ.get('PINATA_API_JWT')}",
+        },
+        files={"file": ("yippee.wav", open("temp.wav", "rb"), "audio/x-wav")},
+    )
+    return response.text
