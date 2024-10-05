@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Equations -> Speech",
+  "description": "Read equations aloud in natural language.",
+  "version": "1.0",
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "images/icon.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": ["https://openstax.org/books/*/pages/*"]
+    }
+  ]
+}
