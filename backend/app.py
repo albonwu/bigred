@@ -13,6 +13,7 @@ CORS(app)
 load_dotenv()
 
 client = Cartesia(api_key=os.environ.get("CARTESIA_API_KEY"))
+
 model_id = "sonic-english"
 voices = client.voices.list()
 voice = None

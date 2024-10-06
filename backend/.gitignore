@@ -1,5 +1,9 @@
+.env
+env/
+mlruns/
 .venv
 *__pycache__
 .env
 temp.pcm
 temp.wav
+
