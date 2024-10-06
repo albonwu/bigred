@@ -68,6 +68,7 @@ async function main() {
       loadingElement = div.removeChild(loadingElement);
       audio.src = signedUrl;
       div.appendChild(audio);
+      equationDiv.ariaLabel = tex;
       equationDiv.dataset.generated = true;
       window.loadingTexToSpeech = false;
     });
