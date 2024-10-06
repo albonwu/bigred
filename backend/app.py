@@ -8,9 +8,6 @@ from cartesia import Cartesia
 import requests
 from datetime import datetime
 import vertexai
-
-# from google.cloud import aiplatform
-# from google.cloud.aiplatform import Model
 from vertexai.generative_models import GenerativeModel
 
 app = Flask(__name__)
@@ -18,26 +15,12 @@ CORS(app)
 load_dotenv()
 
 project_id = "gen-lang-client-0215212318"
-# aiplatform.init(
-#     project=project_id,
-#     location="us-central1",
-#     staging_bucket="gs://bigred",
-#     experiment="tuning-experiment-20241005174113427522",
-#     experiment_description="my experiment description",
-# )
 vertexai.init(
     project=project_id,
     location="us-central1",
 )
-
-# endpoint = aiplatform.Endpoint(
-#     f"projects/{project_id}/locations/us-central1/endpoints/6392262636238536704"
-# )
-
-# palm.configure(api_key=os.environ.get("GOOGLE_CLOUD_KEY"))
 model_id = f"projects/862482900034/locations/us-central1/endpoints/6969849288448802816"
 
-# model = Model(model_id)
 model = GenerativeModel(
     model_id,
     system_instruction=[
@@ -50,17 +33,6 @@ Be as unambiguous as possible - students and mathematicians with vision impairme
 
 @app.route("/test")
 def test():
-    # instances = [
-    #     {
-    #         "input_text": "\\sum_{i=0}^\\infty {\\sum_{i=0}^\\infty {b}} \\times t + e - k"
-    #     }
-    # ]
-    # prediction = endpoint.predict(instances=instances)
-    # print(f"{prediction = }")
-    # response = palm.generate_text(
-    #     model=model_id,
-    #     prompt="\\sum_{i=0}^\\infty {\\sum_{i=0}^\\infty {b}} \\times t + e - k",
-    # )
     response = model.generate_content(
         "\\sum_{i=0}^\\infty {\\sum_{i=0}^\\infty {b}} \\times t + e - k"
     )
@@ -91,8 +63,9 @@ output_format = {
 def index():
     tex = request.args.get("tex")
     print(f"{tex = }")
+    response = model.generate_content(tex)
 
-    transcript = tex or "E equals M C squared"
+    transcript = response.text or "E equals M C squared"
 
     with open("temp.pcm", "wb") as f:
         for audio_chunk in client.tts.sse(
