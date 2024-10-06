@@ -46,7 +46,7 @@ model_id = "sonic-english"
 voices = client.voices.list()
 voice = None
 for voice_data in voices:
-    if voice_data["name"] == "Anime Girl":
+    if voice_data["name"] == "Teacher Lady":
         print(f'{voice_data["id"] = }')
         voice = voice_data
         break

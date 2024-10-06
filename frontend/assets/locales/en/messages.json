@@ -1,11 +1,11 @@
 {
-    "appName": {
-        "message": "tex -> equations"
-    },
-    "appShortName": {
-        "message": "tex -> equations"
-    },
-    "appDescription": {
-        "message": "Read equations aloud in natural language."
-    }
+  "appName": {
+    "message": "Respoke"
+  },
+  "appShortName": {
+    "message": "Respoke"
+  },
+  "appDescription": {
+    "message": "Making equations aceessible through natrual language."
+  }
 }
