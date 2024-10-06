@@ -1,6 +1,37 @@
 import { MathMLToLaTeX } from "mathml-to-latex";
+import { PinataSDK } from "pinata";
+import { PINATA_GATEWAY, PINATA_KEY } from "./key";
+
+const pinata = new PinataSDK({
+  pinataJwt: PINATA_KEY,
+  pinataGateway: PINATA_GATEWAY,
+});
 
 console.log("hello world from the eq -> speech extension!");
+async function findFileWithTex(tex) {
+  const options = {
+    method: "GET",
+    headers: { Authorization: `Bearer ${PINATA_KEY}` },
+  };
+
+  console.log("tex", tex);
+  const endpoint = `https://api.pinata.cloud/v3/files?metadata[tex]=${tex}`;
+  console.log("endpoint", endpoint);
+  const response = await fetch(endpoint, options);
+  const responseJson = await response.json();
+  console.log("responseJson", responseJson);
+  if (responseJson.data.files.length != 0) {
+    const cid = responseJson.data.files[0].cid;
+    console.log("cid", cid);
+    const url = await pinata.gateways.createSignedURL({
+      cid,
+      expires: 24 * 3600,
+    });
+    console.log("url", url);
+    return url;
+  }
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -54,15 +85,22 @@ async function main() {
     audio.controls = true;
     audio.autoplay = true;
     equationDiv.addEventListener("click", async () => {
+      // todo: check for pinata existing before sending
       if (window.loadingTexToSpeech || equationDiv.dataset.generated) {
         return;
       }
+
       window.loadingTexToSpeech = true;
       div.appendChild(loadingElement);
-
       const tex = MathMLToLaTeX.convert(mathMl);
-      const response = await fetch(`${BACKEND}?tex=${tex}`);
-      const signedUrl = await response.text();
+
+      let signedUrl = await findFileWithTex(tex);
+      if (!signedUrl) {
+        console.log("no file found, making new!");
+        const response = await fetch(`${BACKEND}?tex=${tex}`);
+        signedUrl = await response.text();
+      }
+
       console.log("signedUrl", signedUrl);
 
       loadingElement = div.removeChild(loadingElement);
