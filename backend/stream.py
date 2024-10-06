@@ -20,11 +20,14 @@ code = st.text_area(
 
 
 def handle_submit():
-    requests.post(
-        # "https://webhook.site/2022a60b-2d8a-4a0a-b009-c01682a0b0e3",
-        "http://127.0.0.1:5000/",
-        json={"code": code},
+    response = requests.get(
+        f"http://127.0.0.1:5000/?tex={code}",
     )
+    print(f"{response.text = }")
+    st.session_state["audio_url"] = response.text
 
 
 st.button("Submit", on_click=handle_submit)
+
+if "audio_url" in st.session_state:
+    st.audio(st.session_state["audio_url"])

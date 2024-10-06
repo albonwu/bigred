@@ -1,4 +1,5 @@
 import { MathMLToLaTeX } from "mathml-to-latex";
+
 console.log("hello world from the eq -> speech extension!");
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -39,24 +40,36 @@ async function main() {
       continue;
     }
     const parentElement = equationDiv.parentElement;
-    const audio = document.createElement("audio");
-    audio.preload = "none";
-    parentElement.insertBefore(audio, equationDiv);
+    const div = document.createElement("div");
+    div.style.width = "100%";
+    div.style.display = "flex";
+    div.style["flex-direction"] = "column";
+    div.style["align-items"] = "center";
+
+    parentElement.insertBefore(div, equationDiv);
+    let loadingElement = document.createElement("i");
+    loadingElement.innerText = "Loading...";
     // equationDiv.prepend(audio);
-    equationDiv.addEventListener("click", () => {
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.autoplay = true;
+    equationDiv.addEventListener("click", async () => {
+      if (window.loadingTexToSpeech || equationDiv.dataset.generated) {
+        return;
+      }
+      window.loadingTexToSpeech = true;
+      div.appendChild(loadingElement);
+
       const tex = MathMLToLaTeX.convert(mathMl);
-      fetch(BACKEND, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tex }),
-      }).then((data) => {
-        console.log("data", data);
-        audio.controls = true;
-        audio.src =
-          "https://ia802306.us.archive.org/20/items/NeverGonnaGiveYouUp/jocofullinterview41.mp3";
-      });
+      const response = await fetch(`${BACKEND}?tex=${tex}`);
+      const signedUrl = await response.text();
+      console.log("signedUrl", signedUrl);
+
+      loadingElement = div.removeChild(loadingElement);
+      audio.src = signedUrl;
+      div.appendChild(audio);
+      equationDiv.dataset.generated = true;
+      window.loadingTexToSpeech = false;
     });
   }
 }

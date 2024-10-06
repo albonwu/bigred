@@ -1,10 +1,9 @@
-<<<<<<< HEAD
 .env
 env/
 mlruns/
-*__pycache__
-=======
 .venv
 *__pycache__
 .env
->>>>>>> 0d3c9df (initialize cartesia client, install python-dotenv)
+temp.pcm
+temp.wav
+
