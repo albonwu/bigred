@@ -19,7 +19,7 @@ vertexai.init(
     project=project_id,
     location="us-central1",
 )
-model_id = f"projects/862482900034/locations/us-central1/endpoints/6969849288448802816"
+model_id = f"projects/862482900034/locations/us-central1/endpoints/4656687929840631808"
 
 model = GenerativeModel(
     model_id,
@@ -47,7 +47,7 @@ voices = client.voices.list()
 voice = None
 for voice_data in voices:
     if voice_data["name"] == "Teacher Lady":
-        print(f'{voice_data["id"] = }')
+        # print(f'{voice_data["id"] = }')
         voice = voice_data
         break
 else:
@@ -66,6 +66,8 @@ def index():
     response = model.generate_content(tex)
 
     transcript = response.text or "E equals M C squared"
+
+    print(f"{transcript = }")
 
     with open("temp.pcm", "wb") as f:
         for audio_chunk in client.tts.sse(
