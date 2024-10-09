@@ -26,6 +26,14 @@ npm run dev
 
 Then, in your browser load the unpacked extension from `frontend/dist`.
 
+### Frontend Standalone Page
+
+```sh
+cd backend
+streamlit run stream.py
+```
+If this doesn't work, try running the first block of code in the Backend section to set up your virtual environment.
+
 ### Backend
 
 ```sh
@@ -46,7 +54,7 @@ PINATA_GATEWAY=get-this-url-from-pinata.mypinata.cloud
 Change the `model_id` variable in `app.py` to be that of the endpoint of your deployed Vertex AI model. To do this, go to Vertex AI > Deploy and Use > Online prediction, and copy the id of the endpoint you wish to use. Then, replace `model_id` in `app.py` with
 
 ```py
-model_id = f"projects/[project id]/locations/[location]/endpoints/[endpoint id]"
+model_id = f"projects/{project id}/locations/{location}/endpoints/{endpoint id}"
 ```
 
 You may also need to set up [Google Cloud's Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc).
