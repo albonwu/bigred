@@ -4,6 +4,8 @@
 
 <p align="center">Formulas made accessible.</p>
 
+https://github.com/user-attachments/assets/d4cb1b58-fc51-4a8b-861b-e2e89ecf9e3d
+
 ## Inspiration
 
 Reading out of an digital physics book in online school illuminated the shortcomings of screen-readers when it comes to textbook formulas. In most cases, the readers would skip over the equations or say something incomprehensible - which would particularly affect people who rely on text-to-speech technologies, perhaps due to visual impairment.
